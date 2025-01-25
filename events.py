@@ -177,6 +177,7 @@ def handle_workflow_run(data):
     conclusion = data['workflow_run']['conclusion']
     run_number = data['workflow_run']['run_number']
     link = data['workflow_run']['html_url']
+    link = irccolors.colorize(link, 'purple')
 
     if conclusion is None:
         conclusion = ''
@@ -186,13 +187,16 @@ def handle_workflow_run(data):
     else:
         conclusion = irccolors.colorize(conclusion, 'red')
 
-    irk.irk('{} Workflow run {} {}: {}. {}'
-            .format(repo, run_number, action, conclusion, link))
+    branch = data['workflow_run']['head_branch']
+    branch = irccolors.colorize(branch, 'bold-blue')
+
+    irk.irk('{} workflow run {} on {} {}: {}. {}'
+            .format(repo, run_number, branch, action, conclusion, link))
 
 
 def handle_ping_event(data):
     repo = fmt_repo(data)
-    irk.irk('{} ping event'.format(repo))
+    irk.irk('{} ping'.format(repo))
 
 
 def handle_event(event, data):
